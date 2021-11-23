@@ -1,0 +1,13 @@
+name: test_bfr
+title:
+username:
+account: marc-subirana
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5147215
+bundleId: 5284750
+url: https://marc-subirana.shinyapps.io/test_bfr/
+when: 1637676719.88236
+lastSyncTime: 1637676719.88238
+asMultiple: FALSE
+asStatic: FALSE
