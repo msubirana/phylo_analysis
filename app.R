@@ -63,6 +63,7 @@ server <- function(input, output) {
     generate_table_distance <- function(granges){
         csv_db <- read.csv('data/bioinformatics_database.csv')
         csv_db <- head(csv_db, n=20)
+        csv_db$seq_len <- unlist(lapply(csv_db$sequence, function(x) nchar(x)))
         csv_db <- csv_db[csv_db$company %in% granges,]
         names <- csv_db$identification
         sequences <- csv_db$sequencenames <- csv_db$identification
@@ -95,8 +96,9 @@ server <- function(input, output) {
 
 
         df_d <- rownames_to_column(df_d, "identification")
-        select_csv_db <- csv_db[1:5]
+        select_csv_db <- csv_db[c('company','explotation','identification','date', 'orf5','seq_len')]
         joined_df_d <- dplyr::left_join(df_d, select_csv_db)
+        joined_df_d <- joined_df_d %>% select(seq_len, everything())
         joined_df_d <- joined_df_d %>% select(orf5, everything())
         joined_df_d <- joined_df_d %>% select(date, everything())
         joined_df_d <- joined_df_d %>% select(explotation, everything())
@@ -104,7 +106,7 @@ server <- function(input, output) {
         brks <- quantile(df_d[-1], probs = seq(.05, .95, .05), na.rm = TRUE)
         clrs <- green2red(length(brks)+1)
         clrs <- rev(clrs)
-        df_color <- datatable(joined_df_d) %>% formatStyle(names(joined_df_d)[c(-1,-2,-3,-4)], backgroundColor = styleInterval(brks, clrs))
+        df_color <- datatable(joined_df_d) %>% formatStyle(names(joined_df_d)[c(-1,-2,-3,-4,-5)], backgroundColor = styleInterval(brks, clrs))
         df_color
     })
 
@@ -116,15 +118,16 @@ server <- function(input, output) {
         df_d <- round(df_d, 3)
 
         df_d <- rownames_to_column(df_d, "identification")
-        select_csv_db <- csv_db[1:5]
+        select_csv_db <- csv_db[c('company','explotation','identification','date', 'orf5','seq_len')]
         joined_df_d <- dplyr::left_join(df_d, select_csv_db)
+        joined_df_d <- joined_df_d %>% select(seq_len, everything())
         joined_df_d <- joined_df_d %>% select(orf5, everything())
         joined_df_d <- joined_df_d %>% select(date, everything())
         joined_df_d <- joined_df_d %>% select(explotation, everything())
         joined_df_d <- joined_df_d %>% select(company, everything())
         brks <- quantile(df_d[-1], probs = seq(.05, .95, .05), na.rm = TRUE)
         clrs <- green2red(length(brks)+1)
-        df_color <- datatable(joined_df_d) %>% formatStyle(names(joined_df_d)[c(-1,-2,-3,-4)], backgroundColor = styleInterval(brks, clrs))
+        df_color <- datatable(joined_df_d) %>% formatStyle(names(joined_df_d)[c(-1,-2,-3,-4,-5)], backgroundColor = styleInterval(brks, clrs))
         df_color})
 
 
@@ -135,8 +138,9 @@ server <- function(input, output) {
         df_s <- round(df_s, 3)
 
         df_s <- rownames_to_column(df_s, "identification")
-        select_csv_db <- csv_db[1:5]
+        select_csv_db <- csv_db[c('company','explotation','identification','date', 'orf5','seq_len')]
         joined_df_s <- dplyr::left_join(df_s, select_csv_db)
+        joined_df_s <- joined_df_s %>% select(seq_len, everything())
         joined_df_s <- joined_df_s %>% select(orf5, everything())
         joined_df_s <- joined_df_s %>% select(date, everything())
         joined_df_s <- joined_df_s %>% select(explotation, everything())
