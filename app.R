@@ -19,12 +19,12 @@ library(DT)
 library(seqRFLP)
 library(msa)
 library(seqinr)
-library(DT)
 library(shinythemes)
 library(xlsx)
 library(openxlsx)
 
 csv_db <- read.csv('data/bioinformatics_database.csv')
+csv_db$seq_len <- nchar(csv_db$sequence)
 csv_db <- head(csv_db, n=20)
 granges <- unique(csv_db$company)
 
@@ -62,6 +62,7 @@ server <- function(input, output) {
 
     generate_table_distance <- function(granges){
         csv_db <- read.csv('data/bioinformatics_database.csv')
+        csv_db$seq_len <- nchar(csv_db$sequence)
         csv_db <- head(csv_db, n=20)
         csv_db$seq_len <- unlist(lapply(csv_db$sequence, function(x) nchar(x)))
         csv_db <- csv_db[csv_db$company %in% granges,]
@@ -128,7 +129,8 @@ server <- function(input, output) {
         brks <- quantile(df_d[-1], probs = seq(.05, .95, .05), na.rm = TRUE)
         clrs <- green2red(length(brks)+1)
         df_color <- datatable(joined_df_d) %>% formatStyle(names(joined_df_d)[c(-1,-2,-3,-4,-5)], backgroundColor = styleInterval(brks, clrs))
-        df_color})
+        df_color
+    })
 
 
     df_d_s <- reactive({
