@@ -19,7 +19,6 @@ library(DT)
 library(seqRFLP)
 library(msa)
 library(seqinr)
-library(shinythemes)
 library(xlsx)
 library(openxlsx)
 
